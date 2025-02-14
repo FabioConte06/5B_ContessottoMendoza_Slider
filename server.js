@@ -3,7 +3,11 @@ const http = require('http');
 const app = express();
 const path = require('path');
 const multer = require('multer');
+const fs = require('fs');  // Aggiungi questa riga
+const mysql = require('mysql2');  // Aggiungi questa riga
 const database = require('./database');
+
+// Configurazione Multer per il caricamento dei file
 const storage = multer.diskStorage({
     destination: function (req, file, callback) {
         callback(null, path.join(__dirname, 'files'));
@@ -12,23 +16,40 @@ const storage = multer.diskStorage({
         callback(null, file.originalname)
     }
 });
-database.createTable();
 const upload = multer({ storage: storage }).single('file');
+
+// Crea la tabella all'avvio
+database.createTable();
+
+// Serve file statici
 app.use("/", express.static(path.join(__dirname, 'public')));
 app.use("/files", express.static(path.join(__dirname, 'files')));
 
-app.post("/upload", multer({ storage: storage }).single('file'), async(req, res) => {
+// Configurazione MySQL
+const conf = JSON.parse(fs.readFileSync('conf.json'));
+conf.ssl.ca = fs.readFileSync(__dirname + '/ca.pem');
+const connection = mysql.createConnection(conf);
+console.log(__dirname + '/ca.pem'); // Verifica il percorso
+
+// Endpoint per caricare un file
+app.post("/upload", upload, async (req, res) => {
     await database.insert("./files/" + req.file.originalname);
-    res.json({result: "ok"});
+    res.json({ result: "ok" });
 });
-app.get('/images', async(req, res) => {
+
+// Endpoint per ottenere la lista dei file
+app.get('/images', async (req, res) => {
     const list = await database.select();
     res.json(list);
 });
-app.delete("/delete/:id", async(req, res) => {
+
+// Endpoint per cancellare un file
+app.delete("/delete/:id", async (req, res) => {
     await database.delete(req.params.id);
-    res.json({result: "ok"});
+    res.json({ result: "ok" });
 });
+
+// Avvio del server
 const server = http.createServer(app);
 server.listen(5600, () => {
     console.log('- server running');
