@@ -29,14 +29,21 @@ const createMiddleware = () => {
     }
 }
 const controller = async (middleware) => {
-    /* render */
-       const inputFile = document.querySelector('#file');
-       const button = document.querySelector("#button");
-       handleSubmit = async (event) => {
-       await middleware.upload(inputFile);
-        middleware.load().then(render);
-      }
-      button.onclick = handleSubmit;
+    const inputFile = document.querySelector('#file');
+    const button = document.querySelector("#button");
+    const container = document.querySelector('#image-container');
+
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+        await middleware.upload(inputFile);
+        const images = await middleware.load();
+        container.innerHTML = '';
+        images.forEach(image => {
+            const imgElement = `<img src="${image.url}" alt="Image"/>`;
+            container.innerHTML += imgElement;
+        });
     }
-    
+
+    button.onclick = handleSubmit;
+}
     controller(createMiddleware());
