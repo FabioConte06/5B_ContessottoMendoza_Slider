@@ -26,54 +26,24 @@ const createMiddleware = () => {
                 return null;
             }
         }
-    };
-};
-
+    }
+}
 const controller = async (middleware) => {
-    const inputFile = document.querySelector("#file");
+    const inputFile = document.querySelector('#file');
     const button = document.querySelector("#button");
-    const imageTable = document.querySelector("#image-table");
-    const carouselImages = document.querySelector("#carousel-images");
+    const container = document.querySelector('#image-container');
 
-    const renderImages = (images) => {
-        imageTable.innerHTML = "";
-        carouselImages.innerHTML = "";
-
-        images.forEach((image, index) => {
-            const row = `<tr>
-                <td>${image.id}</td>
-                <td>${image.url}</td>
-                <td><button class='btn btn-danger' onclick='deleteImage(${image.id})'>Elimina</button></td>
-            </tr>`;
-            imageTable.innerHTML += row;
-
-            const activeClass = index === 0 ? "active" : "";
-            const carouselItem = `<div class='carousel-item ${activeClass}'>
-                <img src='${image.url}' class='d-block w-100' alt='Immagine'/>
-            </div>`;
-            carouselImages.innerHTML += carouselItem;
-        });
-    };
-
-    const loadImages = async () => {
-        const images = await middleware.load();
-        renderImages(images);
-    };
-
-    const handleSubmit = async () => {
+    const handleSubmit = async (event) => {
+        event.preventDefault();
         await middleware.upload(inputFile);
-        await loadImages();
-    };
+        const images = await middleware.load();
+        container.innerHTML = '';
+        images.forEach(image => {
+            const imgElement = `<img src="${image.url}" alt="Image"/>`;
+            container.innerHTML += imgElement;
+        });
+    }
 
-    const deleteImage = async (id) => {
-        await middleware.delete(id);
-        await loadImages();
-    };
-
-    window.deleteImage = deleteImage;
     button.onclick = handleSubmit;
-    
-    await loadImages();
-};
-
-controller(createMiddleware());
+}
+    controller(createMiddleware());
