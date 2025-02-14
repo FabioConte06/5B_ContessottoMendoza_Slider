@@ -13,37 +13,67 @@ const createMiddleware = () => {
         upload: async (inputFile) => {
             const formData = new FormData();
             formData.append("file", inputFile.files[0]);
-            const body = formData;
             const fetchOptions = {
                 method: "POST",
-                body: body
+                body: formData
             };
             try {
                 const res = await fetch("/upload", fetchOptions);
                 const data = await res.json();
-                console.log(data);
+                return data;
             } catch (e) {
-                console.log(e);
+                console.error(e);
+                return null;
             }
         }
-    }
-}
+    };
+};
+
 const controller = async (middleware) => {
-    const inputFile = document.querySelector('#file');
+    const inputFile = document.querySelector("#file");
     const button = document.querySelector("#button");
-    const container = document.querySelector('#image-container');
+    const imageTable = document.querySelector("#image-table");
+    const carouselImages = document.querySelector("#carousel-images");
 
-    const handleSubmit = async (event) => {
-        event.preventDefault();
-        await middleware.upload(inputFile);
-        const images = await middleware.load();
-        container.innerHTML = '';
-        images.forEach(image => {
-            const imgElement = `<img src="${image.url}" alt="Image"/>`;
-            container.innerHTML += imgElement;
+    const renderImages = (images) => {
+        imageTable.innerHTML = "";
+        carouselImages.innerHTML = "";
+
+        images.forEach((image, index) => {
+            const row = `<tr>
+                <td>${image.id}</td>
+                <td>${image.url}</td>
+                <td><button class='btn btn-danger' onclick='deleteImage(${image.id})'>Elimina</button></td>
+            </tr>`;
+            imageTable.innerHTML += row;
+
+            const activeClass = index === 0 ? "active" : "";
+            const carouselItem = `<div class='carousel-item ${activeClass}'>
+                <img src='${image.url}' class='d-block w-100' alt='Immagine'/>
+            </div>`;
+            carouselImages.innerHTML += carouselItem;
         });
-    }
+    };
 
+    const loadImages = async () => {
+        const images = await middleware.load();
+        renderImages(images);
+    };
+
+    const handleSubmit = async () => {
+        await middleware.upload(inputFile);
+        await loadImages();
+    };
+
+    const deleteImage = async (id) => {
+        await middleware.delete(id);
+        await loadImages();
+    };
+
+    window.deleteImage = deleteImage;
     button.onclick = handleSubmit;
-}
-    controller(createMiddleware());
+    
+    await loadImages();
+};
+
+controller(createMiddleware());

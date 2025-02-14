@@ -15,7 +15,7 @@ const hide = (elements) => {
  
     const render = () => {
         const url = new URL(document.location.href);
-        const pageName = url.hash.replace("#", "") || "homepage"; 
+        const pageName = url.hash.replace("#", "") || "publicpage"; 
  
         
         const selected = pages.find((page) => page.id === pageName) || pages[0];
