@@ -28,22 +28,42 @@ const createMiddleware = () => {
         }
     }
 }
-const controller = async (middleware) => {
-    const inputFile = document.querySelector('#file');
-    const button = document.querySelector("#button");
-    const container = document.querySelector('#image-container');
-
-    const handleSubmit = async (event) => {
-        event.preventDefault();
-        await middleware.upload(inputFile);
-        const images = await middleware.load();
-        container.innerHTML = '';
-        images.forEach(image => {
-            const imgElement = `<img src="${image.url}" alt="Image"/>`;
-            container.innerHTML += imgElement;
-        });
+const controller = async (middleware) => {  
+    const template = `<li class="list-group-item">
+     <a href="$URL">$URL</span></a>
+     <button id="$ID" type="button" class="delete btn btn-danger float-end">X</button>
+     </li>`;
+  
+    const render = (list) => {
+      listUL.innerHTML = list.map((element) => {
+        let row = template.replace("$ID", element.id);
+        row = row.replace("$URL", element.name);
+        row = row.replace("$URL", element.name);
+        return row;
+      }).join("\n");
+      const buttonList = document.querySelectorAll(".delete");
+      buttonList.forEach((button) => {
+        button.onclick = () => {
+          middleware.delete(button.id)
+            .then(
+              () => middleware.load()
+            ).then((list) => {
+              render(list);
+            });
+        }
+      });
     }
-
+  
+    const inputFile = document.querySelector('#file');
+    const button = document.querySelector("#button");  
+    const listUL = document.getElementById("listUL");
+  
+    handleSubmit = async (event) => {
+      await middleware.upload(inputFile);
+      const list = await middleware.load();
+      render(list);
+    }
     button.onclick = handleSubmit;
-}
+    middleware.load().then(render);
+  }
     controller(createMiddleware());
