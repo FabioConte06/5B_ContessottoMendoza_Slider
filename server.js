@@ -39,7 +39,6 @@ try {
     console.error('Errore nel leggere conf.json:', error);
 }
 
-
 conf.ssl.ca = fs.readFileSync(__dirname + '/ca.pem');
 const connection = mysql.createConnection(conf);
 console.log(__dirname + '/ca.pem'); // Verifica il percorso
