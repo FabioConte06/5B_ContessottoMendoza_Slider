@@ -3,6 +3,7 @@ const loginButton = document.getElementById("login-button");
 const privateSection = document.getElementById("admin-page"); // usiamo admin-page come sezione privata
 const loginUsername = document.getElementById("username");
 const loginPassword = document.getElementById("password");
+const adminContent = document.getElementById("admin-content");
 
 // Selettori per il pulsante di accesso all'Admin dalla pagina pubblica
 const adminAccessButton = document.getElementById("admin-access-button");
@@ -50,6 +51,9 @@ const login = async (username, password) => {
       }
       if (publicPage) {
         publicPage.style.display = "none";
+      }
+      if (adminContent) {
+        adminContent.style.display = "block";
       }
     } else {
       alert("Credenziali errate.");

@@ -28,22 +28,53 @@ const createMiddleware = () => {
         }
     }
 }
+
 const controller = async (middleware) => {
     const inputFile = document.querySelector('#file');
     const button = document.querySelector("#button");
     const container = document.querySelector('#image-container');
+    const imageTable = document.querySelector('#image-table');
+
+    const loadImages = async () => {
+        const images = await middleware.load();
+        container.innerHTML = '';
+        imageTable.innerHTML = '';
+        images.forEach(image => {
+            const imgElement = `<img src="${image.url}" alt="Image"/>`;
+            container.innerHTML += imgElement;
+
+            const row = `
+                <tr>
+                    <td>${image.id}</td>
+                    <td>${image.url}</td>
+                    <td><button class="btn btn-danger delete-button" data-id="${image.id}">Delete</button></td>
+                </tr>
+            `;
+            imageTable.innerHTML += row;
+        });
+
+        document.querySelectorAll('.delete-button').forEach(button => {
+            button.onclick = async () => {
+                const id = button.getAttribute('data-id');
+                await deleteImage(id);
+            };
+        });
+    }
 
     const handleSubmit = async (event) => {
         event.preventDefault();
         await middleware.upload(inputFile);
-        const images = await middleware.load();
-        container.innerHTML = '';
-        images.forEach(image => {
-            const imgElement = `<img src="${image.url}" alt="Image"/>`;
-            container.innerHTML += imgElement;
-        });
+        await loadImages();
+    }
+
+    const deleteImage = async (id) => {
+        await middleware.delete(id);
+        await loadImages();
     }
 
     button.onclick = handleSubmit;
+
+    await loadImages();
 }
-    controller(createMiddleware());
+
+controller(createMiddleware());
