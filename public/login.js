@@ -26,7 +26,7 @@ if (privateSection) {
 // Funzione per il login
 const login = async (username, password) => {
   try {
-    const confResponse = await fetch("../conf.json");
+    const confResponse = await fetch("conf.json");
     if (!confResponse.ok) throw new Error("Errore nel caricamento di conf.json");
     const confData = await confResponse.json();
 
@@ -34,7 +34,7 @@ const login = async (username, password) => {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        key: confData.cacheToken,
+        key: confData.token,
       },
       body: JSON.stringify({ username, password }),
     });

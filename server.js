@@ -31,13 +31,7 @@ app.use("/files", express.static(path.join(__dirname, 'files')));
 const confPath = __dirname + '\\public\\conf.json';
 console.log('Percorso del file conf.json:', confPath);
 
-let conf;
-try {
-    conf = JSON.parse(fs.readFileSync(confPath, 'utf8'));
-    console.log('File conf.json caricato con successo:', conf);
-} catch (error) {
-    console.error('Errore nel leggere conf.json:', error);
-}
+let conf = JSON.parse(fs.readFileSync(path.join(__dirname, 'public', 'conf.json')));
 
 
 conf.ssl.ca = fs.readFileSync(__dirname + '/ca.pem');
