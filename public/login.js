@@ -3,6 +3,8 @@ const loginButton = document.getElementById("login-button");
 const privateSection = document.getElementById("admin-page"); // usiamo admin-page come sezione privata
 const loginUsername = document.getElementById("username");
 const loginPassword = document.getElementById("password");
+const adminContent = document.getElementById("admin-content");
+const loginForm = document.getElementById("login-form"); // Aggiungi questa riga per selezionare il form
 
 // Selettori per il pulsante di accesso all'Admin dalla pagina pubblica
 const adminAccessButton = document.getElementById("admin-access-button");
@@ -18,15 +20,21 @@ if (privateSection) {
     if (publicPage) {
       publicPage.style.display = "none";
     }
+    if (loginForm) {
+      loginForm.style.display = "none"; // Nasconde il form di login se già loggato
+    }
   } else {
     privateSection.style.display = "none";
+    if (loginForm) {
+      loginForm.style.display = "block"; // Mostra il form di login se non loggato
+    }
   }
 }
 
 // Funzione per il login
 const login = async (username, password) => {
   try {
-    const confResponse = await fetch("../conf.json");
+    const confResponse = await fetch("conf.json");
     if (!confResponse.ok) throw new Error("Errore nel caricamento di conf.json");
     const confData = await confResponse.json();
 
@@ -34,7 +42,7 @@ const login = async (username, password) => {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        key: confData.cacheToken,
+        key: confData.token,
       },
       body: JSON.stringify({ username, password }),
     });
@@ -50,6 +58,12 @@ const login = async (username, password) => {
       }
       if (publicPage) {
         publicPage.style.display = "none";
+      }
+      if (adminContent) {
+        adminContent.style.display = "block";
+      }
+      if (loginForm) {
+        loginForm.style.display = "none"; // Nasconde il form di login dopo il login
       }
     } else {
       alert("Credenziali errate.");
