@@ -9,9 +9,7 @@
 <body>
     <div id="app" class="container mt-4">
         <!-- Pagina pubblica -->
-        <!-- Pagina pubblica -->
         <div id="public-page" class="page">
-
             <h1 class="text-center">Galleria Immagini</h1>
             <div id="carousel" class="carousel slide" data-bs-ride="carousel">
                 <div class="carousel-inner" id="carousel-images">
@@ -28,15 +26,12 @@
         </div>
 
         <!-- Pagina admin -->
-        <!-- Pagina admin -->
         <div id="admin-page" class="page" style="display: none;">
-
             <h1 class="text-center">Amministrazione Immagini</h1>
             <form id="login-form">
                 <input type="text" id="username" class="form-control mb-2" placeholder="Username" autocomplete="username">
                 <input type="password" id="password" class="form-control mb-2" placeholder="Password" autocomplete="current-password">
                 <button id="login-button" class="btn btn-primary">Login</button>
-
             </form>
             
             <div id="admin-content" style="display: none;">
@@ -58,6 +53,7 @@
                         <!-- Immagini caricate dinamicamente -->
                     </tbody>
                 </table>
+                <button id="home-button" class="btn btn-secondary mt-3">Torna alla Home</button>
             </div>
         </div>
     </div>
@@ -65,6 +61,5 @@
     <script type="module" src="index.js"></script>
     <script type="module" src="navigator.js"></script>
     <script type="module" src="login.js"></script>
-
 </body>
 </html>
