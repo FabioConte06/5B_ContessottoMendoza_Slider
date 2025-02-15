@@ -26,7 +26,20 @@ app.use("/", express.static(path.join(__dirname, 'public')));
 app.use("/files", express.static(path.join(__dirname, 'files')));
 
 // Configurazione MySQL
-const conf = JSON.parse(fs.readFileSync('conf.json'));
+//const conf = JSON.parse(fs.readFileSync('public\conf.json'));
+//const confPath = path.join(__dirname, 'public', 'conf.json');
+const confPath = __dirname + '\\public\\conf.json';
+console.log('Percorso del file conf.json:', confPath);
+
+let conf;
+try {
+    conf = JSON.parse(fs.readFileSync(confPath, 'utf8'));
+    console.log('File conf.json caricato con successo:', conf);
+} catch (error) {
+    console.error('Errore nel leggere conf.json:', error);
+}
+
+
 conf.ssl.ca = fs.readFileSync(__dirname + '/ca.pem');
 const connection = mysql.createConnection(conf);
 console.log(__dirname + '/ca.pem'); // Verifica il percorso

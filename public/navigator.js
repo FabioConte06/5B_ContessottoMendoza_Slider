@@ -20,7 +20,12 @@ const hide = (elements) => {
         
         const selected = pages.find((page) => page.id === pageName) || pages[0];
  
-        
+        if (!selected) {
+         console.error("Nessuna pagina trovata per:", pageName);
+         return;
+     }
+
+
         hide(pages);
         show(selected);
     };
