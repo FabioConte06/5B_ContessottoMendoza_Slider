@@ -1,3 +1,5 @@
+import initCarosello from './carosello.js';
+
 const createMiddleware = () => {
     return {
         load: async () => {
@@ -34,7 +36,6 @@ const controller = async (middleware) => {
     const button = document.querySelector("#button");
     const container = document.querySelector('#image-container');
     const imageTable = document.querySelector('#image-table');
-    const carouselImages = document.querySelector('#carousel-images');
     const homeButton = document.querySelector("#home-button");
     const publicPage = document.querySelector("#public-page");
     const adminPage = document.querySelector("#admin-page");
@@ -43,7 +44,6 @@ const controller = async (middleware) => {
         const images = await middleware.load();
         container.innerHTML = '';
         imageTable.innerHTML = '';
-        carouselImages.innerHTML = '';
         images.forEach((image, index) => {
             const imgElement = `<img src="${image.url}" alt="Image"/>`;
             container.innerHTML += imgElement;
@@ -56,15 +56,6 @@ const controller = async (middleware) => {
                 </tr>
             `;
             imageTable.innerHTML += row;
-
-            let carouselItem = '<div class="carousel-item';
-            if (index === 0) {
-                carouselItem += ' active';
-            }
-            carouselItem += `">
-                <img src="${image.url}" alt="Image">
-            </div>`;
-            carouselImages.innerHTML += carouselItem;
         });
 
         document.querySelectorAll('.delete-button').forEach(button => {
@@ -73,6 +64,9 @@ const controller = async (middleware) => {
                 await deleteImage(id);
             };
         });
+
+        // Inizializza il carosello con le immagini caricate
+        initCarosello(images);
     }
 
     const handleSubmit = async (event) => {

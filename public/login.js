@@ -23,6 +23,9 @@ if (privateSection) {
     if (loginForm) {
       loginForm.style.display = "none"; // Nasconde il form di login se già loggato
     }
+    if (adminContent) {
+      adminContent.style.display = "block"; // Mostra il contenuto dell'admin se già loggato
+    }
   } else {
     privateSection.style.display = "none";
     if (loginForm) {
