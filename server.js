@@ -25,8 +25,6 @@ database.createTable();
 app.use("/", express.static(path.join(__dirname, 'public')));
 app.use("/files", express.static(path.join(__dirname, 'files')));
 
-//const conf = JSON.parse(fs.readFileSync('public\conf.json'));
-//const confPath = path.join(__dirname, 'public', 'conf.json');
 const confPath = __dirname + '\\public\\conf.json';
 console.log('Percorso del file conf.json:', confPath);
 
@@ -50,6 +48,11 @@ app.get('/images', async (req, res) => {
 
 app.delete("/delete/:id", async (req, res) => {
     await database.delete(req.params.id);
+    res.json({ result: "ok" });
+});
+
+app.delete("/reset", async (req, res) => {
+    await database.cancellaTutto();
     res.json({ result: "ok" });
 });
 

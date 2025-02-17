@@ -37,6 +37,7 @@ const controller = async (middleware) => {
     const container = document.querySelector('#image-container');
     const imageTable = document.querySelector('#image-table');
     const homeButton = document.querySelector("#home-button");
+    const resetButton = document.querySelector("#reset-button");
     const publicPage = document.querySelector("#public-page");
     const adminPage = document.querySelector("#admin-page");
 
@@ -78,7 +79,13 @@ const controller = async (middleware) => {
         await loadImages();
     }
 
+    const resetImages = async () => {
+        await fetch("/reset", { method: "DELETE" });
+        await loadImages();
+    }
+
     button.onclick = handleSubmit;
+    resetButton.onclick = resetImages;
 
     homeButton.onclick = () => {
         adminPage.style.display = "none";
