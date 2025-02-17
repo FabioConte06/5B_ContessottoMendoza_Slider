@@ -44,7 +44,7 @@ jspm_packages/
 package-lock.json
 conf.json
 files/
-ca.pem/
+ca.pem
     
 # Snowpack dependency directory (https://snowpack.dev/)
 web_modules/
