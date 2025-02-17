@@ -1,19 +1,17 @@
-// Selettori degli elementi HTML
+
 const loginButton = document.getElementById("login-button");
-const privateSection = document.getElementById("admin-page"); // usiamo admin-page come sezione privata
+const privateSection = document.getElementById("admin-page");
 const loginUsername = document.getElementById("username");
 const loginPassword = document.getElementById("password");
 const adminContent = document.getElementById("admin-content");
-const loginForm = document.getElementById("login-form"); // Aggiungi questa riga per selezionare il form
+const loginForm = document.getElementById("login-form"); 
 
-// Selettori per il pulsante di accesso all'Admin dalla pagina pubblica
 const adminAccessButton = document.getElementById("admin-access-button");
 const publicPage = document.getElementById("public-page");
 
-// Controllo se l'utente è già loggato
+
 const isLogged = sessionStorage.getItem("Logged") === "true";
 
-// Mostra o nasconde la sezione admin in base allo stato del login
 if (privateSection) {
   if (isLogged) {
     privateSection.style.display = "block";
@@ -21,15 +19,15 @@ if (privateSection) {
       publicPage.style.display = "none";
     }
     if (loginForm) {
-      loginForm.style.display = "none"; // Nasconde il form di login se già loggato
+      loginForm.style.display = "none"; 
     }
     if (adminContent) {
-      adminContent.style.display = "block"; // Mostra il contenuto dell'admin se già loggato
+      adminContent.style.display = "block";
     }
   } else {
     privateSection.style.display = "none";
     if (loginForm) {
-      loginForm.style.display = "block"; // Mostra il form di login se non loggato
+      loginForm.style.display = "block";
     }
   }
 }
@@ -66,7 +64,7 @@ const login = async (username, password) => {
         adminContent.style.display = "block";
       }
       if (loginForm) {
-        loginForm.style.display = "none"; // Nasconde il form di login dopo il login
+        loginForm.style.display = "none"; 
       }
     } else {
       alert("Credenziali errate.");
@@ -77,24 +75,22 @@ const login = async (username, password) => {
   }
 };
 
-// Gestione del click sul pulsante di login
-if (loginButton) {
-  loginButton.onclick = (event) => {
-    event.preventDefault(); // Previene il submit del form che potrebbe ricaricare la pagina
-    const username = loginUsername.value.trim();
-    const password = loginPassword.value.trim();
 
-    if (username && password) {
+if (loginButton) {
+  loginButton.onclick = () => {
+    const username = loginUsername.value;
+    const password = loginPassword.value;
+
+    if (username !== "" && password !== "") {
       login(username, password);
     } else {
       alert("Compila tutti i campi.");
     }
   };
-} else {
-  console.error("Elemento login-button non trovato.");
 }
 
-// Gestione del click sul pulsante "Accedi all'Admin" dalla pagina pubblica
+
+
 if (adminAccessButton && publicPage && privateSection) {
   adminAccessButton.onclick = () => {
     publicPage.style.display = "none";

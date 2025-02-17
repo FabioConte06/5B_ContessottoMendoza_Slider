@@ -64,8 +64,6 @@ const controller = async (middleware) => {
                 await deleteImage(id);
             };
         });
-
-        // Inizializza il carosello con le immagini caricate
         initCarosello(images);
     }
 

@@ -2,12 +2,10 @@ const initCarosello = (images) => {
     const carouselContainer = document.querySelector('#carousel-images');
     const prevButton = document.querySelector('#prev-button');
     const nextButton = document.querySelector('#next-button');
-;
-    console.log(prevButton, nextButton); 
-    let currentImageIndex = 0;
 
-    const imageWidth = 600; 
-    const imageHeight = 400; 
+    let currentImageIndex = 0;
+    const imageWidth = 600;
+    const imageHeight = 400;
 
     const updateCarousel = () => {
         const carouselItems = document.querySelectorAll('.my-carousel-item');
@@ -19,11 +17,11 @@ const initCarosello = (images) => {
         }
     };
 
-
     const createCarouselItem = (imageUrl, index) => {
         return `
             <div class="my-carousel-item ${index === 0 ? 'active' : ''}">
-                <img src="${imageUrl}" alt="Image" class="my-carousel-item-img" style="width: ${imageWidth}px; height: ${imageHeight}px; object-fit: contain;">
+                <img src="${imageUrl}" alt="Image" class="my-carousel-item-img" 
+                    style="width: ${imageWidth}px; height: ${imageHeight}px; object-fit: contain;">
             </div>
         `;
     };
@@ -35,29 +33,19 @@ const initCarosello = (images) => {
         });
     };
 
-
     const goToNextImage = () => {
-        if (currentImageIndex < images.length - 1) {
-            currentImageIndex++;
-        } else {
-            currentImageIndex = 0; 
-        }
+        currentImageIndex = (currentImageIndex + 1) % images.length;
         updateCarousel();
     };
 
     const goToPrevImage = () => {
-        if (currentImageIndex > 0) {
-            currentImageIndex--;
-        } else {
-            currentImageIndex = images.length - 1; 
-        }
+        currentImageIndex = (currentImageIndex - 1 + images.length) % images.length;
         updateCarousel();
     };
 
 
-    nextButton.addEventListener('click', goToNextImage);
-    prevButton.addEventListener('click', goToPrevImage);
-
+    nextButton.onclick = goToNextImage;
+    prevButton.onclick = goToPrevImage;
 
     loadCarouselImages();
 };

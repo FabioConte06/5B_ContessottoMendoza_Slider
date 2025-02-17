@@ -26,11 +26,11 @@
         <!-- Pagina admin -->
         <div id="admin-page" class="page" style="display: none;">
             <h1 class="text-center">Amministrazione Immagini</h1>
-            <form id="login-form">
+            <div id="login-form">
                 <input type="text" id="username" class="form-control mb-2" placeholder="Username" autocomplete="username">
                 <input type="password" id="password" class="form-control mb-2" placeholder="Password" autocomplete="current-password">
                 <button id="login-button" class="btn btn-primary">Login</button>
-            </form>
+            </div>
             
             <div id="admin-content" style="display: none;">
                 <h2>Gestione Immagini</h2>
@@ -48,7 +48,6 @@
                         </tr>
                     </thead>
                     <tbody id="image-table">
-                        <!-- Immagini caricate dinamicamente -->
                     </tbody>
                 </table>
                 <button id="home-button" class="btn btn-secondary mt-3">Torna alla Home</button>
